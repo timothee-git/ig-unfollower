@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Find out who doesn't follow you back on Instagram. Upload your data export and get instant, private results." />
+  <title>Unfollowed — Instagram Follower Checker</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
+
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body>
+
+  <!-- ===================== SKIP LINK ===================== -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- ===================== HEADER ===================== -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="wordmark" aria-label="Unfollowed app">
+        <span class="wordmark-icon" aria-hidden="true">◈</span>
+        <span>Unfollowed</span>
+      </div>
+      <button
+        class="theme-toggle"
+        id="theme-toggle"
+        aria-label="Toggle dark mode"
+        title="Toggle dark mode"
+      >
+        <i class="ti ti-moon" aria-hidden="true" id="theme-icon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===================== MAIN ===================== -->
+  <main id="main-content" class="container">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <h1 id="hero-heading" class="hero-title">
+        Who's <em>not</em><br/>following back?
+      </h1>
+      <p class="hero-sub">
+        Upload your Instagram data export and find out in seconds.
+        Everything runs locally — no login, no server, no tracking.
+      </p>
+    </section>
+
+    <!-- How-to Steps -->
+    <section class="howto" aria-labelledby="howto-heading">
+      <h2 id="howto-heading" class="sr-only">How to get your Instagram data</h2>
+      <ol class="steps-list" role="list">
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">01</span>
+          <div class="step-body">
+            <strong>Open Instagram settings</strong>
+            <p>Go to <em>Settings → Your activity → Download your information</em></p>
+          </div>
+        </li>
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">02</span>
+          <div class="step-body">
+            <strong>Request JSON format</strong>
+            <p>Select <em>JSON</em> (not HTML). You'll get an email with a download link in ~30 min.</p>
+          </div>
+        </li>
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">03</span>
+          <div class="step-body">
+            <strong>Locate the files</strong>
+            <p>Unzip the archive. Inside <code>connections/followers_and_following/</code> find <code>followers_1.json</code> and <code>following.json</code>.</p>
+          </div>
+        </li>
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">04</span>
+          <div class="step-body">
+            <strong>Upload &amp; analyze</strong>
+            <p>Drop both files below and click <em>Analyze</em> to see your results instantly.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Upload Panel -->
+    <section class="upload-section" aria-labelledby="upload-heading">
+      <h2 id="upload-heading" class="section-label">Upload your files</h2>
+
+      <div class="upload-grid" role="group" aria-label="File upload areas">
+
+        <!-- Followers -->
+        <div
+          class="drop-zone"
+          id="zone-followers"
+          role="button"
+          tabindex="0"
+          aria-label="Upload followers JSON file. Click or press Enter to browse."
+          aria-describedby="hint-followers"
+          data-type="followers"
+        >
+          <input
+            type="file"
+            id="file-followers"
+            accept=".json"
+            aria-label="Followers JSON file"
+            tabindex="-1"
+          />
+          <i class="ti ti-users drop-icon" aria-hidden="true"></i>
+          <span class="drop-label" id="label-followers">followers_1.json</span>
+          <span class="drop-hint" id="hint-followers">Click or drag &amp; drop</span>
+          <span class="drop-check" aria-hidden="true">✓ Loaded</span>
+        </div>
+
+        <!-- Following -->
+        <div
+          class="drop-zone"
+          id="zone-following"
+          role="button"
+          tabindex="0"
+          aria-label="Upload following JSON file. Click or press Enter to browse."
+          aria-describedby="hint-following"
+          data-type="following"
+        >
+          <input
+            type="file"
+            id="file-following"
+            accept=".json"
+            aria-label="Following JSON file"
+            tabindex="-1"
+          />
+          <i class="ti ti-user-plus drop-icon" aria-hidden="true"></i>
+          <span class="drop-label" id="label-following">following.json</span>
+          <span class="drop-hint" id="hint-following">Click or drag &amp; drop</span>
+          <span class="drop-check" aria-hidden="true">✓ Loaded</span>
+        </div>
+
+      </div>
+
+      <!-- Error message -->
+      <div
+        class="error-banner"
+        id="error-banner"
+        role="alert"
+        aria-live="assertive"
+        hidden
+      >
+        <i class="ti ti-alert-circle" aria-hidden="true"></i>
+        <span id="error-text"></span>
+      </div>
+
+      <!-- CTA -->
+      <button
+        class="analyze-btn"
+        id="analyze-btn"
+        disabled
+        aria-disabled="true"
+        aria-describedby="analyze-hint"
+      >
+        <i class="ti ti-search" aria-hidden="true"></i>
+        Analyze
+      </button>
+      <p class="analyze-hint" id="analyze-hint" aria-live="polite">
+        Upload both files to enable analysis
+      </p>
+    </section>
+
+    <!-- Results -->
+    <section
+      class="results-section"
+      id="results-section"
+      aria-labelledby="results-heading"
+      hidden
+    >
+      <h2 id="results-heading" class="sr-only">Analysis results</h2>
+
+      <!-- Stats -->
+      <div class="stats-row" role="region" aria-label="Summary statistics">
+        <div class="stat-card">
+          <span class="stat-val" id="stat-followers">—</span>
+          <span class="stat-label">followers</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-val" id="stat-following">—</span>
+          <span class="stat-label">following</span>
+        </div>
+        <div class="stat-card stat-danger">
+          <span class="stat-val" id="stat-nonfollowers">—</span>
+          <span class="stat-label">not following back</span>
+        </div>
+        <div class="stat-card stat-positive">
+          <span class="stat-val" id="stat-mutual">—</span>
+          <span class="stat-label">mutual</span>
+        </div>
+      </div>
+
+      <!-- Controls -->
+      <div class="list-controls" role="group" aria-label="Filter and sort results">
+        <label for="search-input" class="sr-only">Search by username</label>
+        <div class="search-wrap">
+          <i class="ti ti-search search-icon" aria-hidden="true"></i>
+          <input
+            type="search"
+            id="search-input"
+            class="search-input"
+            placeholder="Search username…"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button
+            class="search-clear"
+            id="search-clear"
+            aria-label="Clear search"
+            hidden
+          >
+            <i class="ti ti-x" aria-hidden="true"></i>
+          </button>
+        </div>
+
+        <label for="sort-select" class="sr-only">Sort by</label>
+        <select id="sort-select" class="sort-select" aria-label="Sort results">
+          <option value="alpha">Name A → Z</option>
+          <option value="alpha-desc">Name Z → A</option>
+          <option value="date-new">Followed: newest</option>
+          <option value="date-old">Followed: oldest</option>
+        </select>
+
+        <button class="export-btn" id="export-btn" aria-label="Export results as CSV file">
+          <i class="ti ti-download" aria-hidden="true"></i>
+          Export CSV
+        </button>
+      </div>
+
+      <!-- Live region for screen reader list count -->
+      <p class="sr-only" id="list-count" aria-live="polite" aria-atomic="true"></p>
+
+      <!-- List -->
+      <ul
+        class="result-list"
+        id="result-list"
+        role="list"
+        aria-label="Accounts not following you back"
+        aria-live="polite"
+      ></ul>
+
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p>All processing happens in your browser. No data leaves your device.</p>
+      <p class="footer-note">Not affiliated with Instagram or Meta.</p>
+    </div>
+  </footer>
+
+  <script src="js/parser.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
