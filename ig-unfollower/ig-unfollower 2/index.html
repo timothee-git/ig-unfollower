@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Find out who doesn't follow you back on Instagram. Upload your data export and get instant, private results." />
+  <title>Unfollowed — Instagram Follower Checker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- HEADER -->
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="wordmark" aria-label="Unfollowed app">
+        <span class="wordmark-icon" aria-hidden="true">◈</span>
+        <span>Unfollowed</span>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <i class="ti ti-moon" aria-hidden="true" id="theme-icon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main id="main-content" class="container">
+
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <h1 id="hero-heading" class="hero-title">Who's <em>not</em><br/>following back?</h1>
+      <p class="hero-sub">Upload your Instagram data export for instant, private results. Everything runs locally — no login, no server, no tracking.</p>
+    </section>
+
+    <!-- Steps -->
+    <section class="howto" aria-labelledby="howto-heading">
+      <h2 id="howto-heading" class="sr-only">How to get your Instagram data</h2>
+      <ol class="steps-list" role="list">
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">01</span>
+          <div class="step-body">
+            <strong>Open Instagram settings</strong>
+            <p>Go to <em>Settings → Your activity → Download your information</em></p>
+          </div>
+        </li>
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">02</span>
+          <div class="step-body">
+            <strong>Request JSON format</strong>
+            <p>Select <em>JSON</em> (not HTML). You'll get a download link by email in ~30 min.</p>
+          </div>
+        </li>
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">03</span>
+          <div class="step-body">
+            <strong>Find your files</strong>
+            <p>Unzip the archive. Inside <code>connections/followers_and_following/</code> find all <code>followers_*.json</code> files and <code>following.json</code>.</p>
+          </div>
+        </li>
+        <li class="step-card">
+          <span class="step-num" aria-hidden="true">04</span>
+          <div class="step-body">
+            <strong>Upload &amp; analyze</strong>
+            <p>Drop your files below. If you have multiple followers files, select them all at once.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Upload -->
+    <section class="upload-section" aria-labelledby="upload-heading">
+      <h2 id="upload-heading" class="section-label">Upload your files</h2>
+
+      <div class="upload-grid" role="group" aria-label="File upload areas">
+
+        <!-- Followers (multi-file) -->
+        <div
+          class="drop-zone"
+          id="zone-followers"
+          role="button"
+          tabindex="0"
+          aria-label="Upload followers JSON files. Instagram may split these into followers_1.json, followers_2.json, etc. — select all of them."
+          data-type="followers"
+        >
+          <input type="file" id="file-followers" accept=".json" multiple tabindex="-1" aria-label="Followers JSON files (select all follower files)" />
+          <i class="ti ti-users drop-icon" aria-hidden="true"></i>
+          <span class="drop-label" id="label-followers">followers_*.json</span>
+          <span class="drop-hint" id="hint-followers">Click or drag &amp; drop<br/><small>Select ALL followers files</small></span>
+          <span class="drop-check" aria-hidden="true" id="check-followers">✓ Loaded</span>
+        </div>
+
+        <!-- Following (single file) -->
+        <div
+          class="drop-zone"
+          id="zone-following"
+          role="button"
+          tabindex="0"
+          aria-label="Upload following JSON file. Click or press Enter to browse."
+          data-type="following"
+        >
+          <input type="file" id="file-following" accept=".json" tabindex="-1" aria-label="Following JSON file" />
+          <i class="ti ti-user-plus drop-icon" aria-hidden="true"></i>
+          <span class="drop-label" id="label-following">following.json</span>
+          <span class="drop-hint" id="hint-following">Click or drag &amp; drop</span>
+          <span class="drop-check" aria-hidden="true" id="check-following">✓ Loaded</span>
+        </div>
+
+      </div>
+
+      <!-- Error -->
+      <div class="error-banner" id="error-banner" role="alert" aria-live="assertive" hidden>
+        <i class="ti ti-alert-circle" aria-hidden="true"></i>
+        <span id="error-text"></span>
+      </div>
+
+      <button class="analyze-btn" id="analyze-btn" disabled aria-disabled="true" aria-describedby="analyze-hint">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        Analyze
+      </button>
+      <p class="analyze-hint" id="analyze-hint" aria-live="polite">Upload both files to enable analysis</p>
+    </section>
+
+    <!-- Results -->
+    <section class="results-section" id="results-section" aria-labelledby="results-heading" hidden>
+      <h2 id="results-heading" class="sr-only">Analysis results</h2>
+
+      <!-- Stat cards -->
+      <div class="stats-row" role="region" aria-label="Summary statistics">
+        <div class="stat-card">
+          <span class="stat-val" id="stat-followers">—</span>
+          <span class="stat-label">followers</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-val" id="stat-following">—</span>
+          <span class="stat-label">following</span>
+        </div>
+        <div class="stat-card stat-danger">
+          <span class="stat-val" id="stat-notfollowingback">—</span>
+          <span class="stat-label">don't follow back</span>
+        </div>
+        <div class="stat-card stat-positive">
+          <span class="stat-val" id="stat-mutual">—</span>
+          <span class="stat-label">mutual</span>
+        </div>
+        <div class="stat-card stat-neutral">
+          <span class="stat-val" id="stat-notfollowedback">—</span>
+          <span class="stat-label">you don't follow back</span>
+        </div>
+        <div class="stat-card stat-ratio">
+          <span class="stat-val" id="stat-ratio">—</span>
+          <span class="stat-label">follower ratio</span>
+        </div>
+      </div>
+
+      <!-- Ratio bar -->
+      <div class="ratio-bar-wrap" aria-label="Follow-back rate" role="img" aria-describedby="ratio-desc">
+        <div class="ratio-bar-track">
+          <div class="ratio-bar-fill" id="ratio-bar-fill"></div>
+        </div>
+        <p class="ratio-desc" id="ratio-desc"></p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs" role="tablist" aria-label="Result views">
+        <button class="tab active" id="tab-notfollowing" role="tab" aria-selected="true"  aria-controls="panel-notfollowing" data-tab="notfollowing">
+          <i class="ti ti-user-x" aria-hidden="true"></i>
+          Don't follow back
+          <span class="tab-count" id="tc-notfollowing"></span>
+        </button>
+        <button class="tab" id="tab-notfollowed" role="tab" aria-selected="false" aria-controls="panel-notfollowed" data-tab="notfollowed">
+          <i class="ti ti-user-check" aria-hidden="true"></i>
+          You don't follow back
+          <span class="tab-count" id="tc-notfollowed"></span>
+        </button>
+        <button class="tab" id="tab-recent" role="tab" aria-selected="false" aria-controls="panel-recent" data-tab="recent">
+          <i class="ti ti-clock" aria-hidden="true"></i>
+          Recent followers
+          <span class="tab-count" id="tc-recent"></span>
+        </button>
+      </div>
+
+      <!-- Panel: Don't follow back -->
+      <div class="tab-panel" id="panel-notfollowing" role="tabpanel" aria-labelledby="tab-notfollowing">
+        <div class="list-controls">
+          <div class="search-wrap">
+            <i class="ti ti-search search-icon" aria-hidden="true"></i>
+            <input type="search" id="search-notfollowing" class="search-input" placeholder="Search username…" autocomplete="off" spellcheck="false" aria-label="Search accounts that don't follow back" />
+            <button class="search-clear" id="clear-notfollowing" aria-label="Clear search" hidden><i class="ti ti-x" aria-hidden="true"></i></button>
+          </div>
+          <select id="sort-notfollowing" class="sort-select" aria-label="Sort results">
+            <option value="alpha">Name A → Z</option>
+            <option value="alpha-desc">Name Z → A</option>
+            <option value="date-new">Followed: newest</option>
+            <option value="date-old">Followed: oldest</option>
+          </select>
+          <button class="export-btn" id="export-notfollowing" aria-label="Export this list as CSV">
+            <i class="ti ti-download" aria-hidden="true"></i> Export CSV
+          </button>
+        </div>
+        <p class="sr-only" id="count-notfollowing" aria-live="polite" aria-atomic="true"></p>
+        <ul class="result-list" id="list-notfollowing" role="list" aria-label="Accounts that don't follow you back"></ul>
+      </div>
+
+      <!-- Panel: You don't follow back -->
+      <div class="tab-panel hidden" id="panel-notfollowed" role="tabpanel" aria-labelledby="tab-notfollowed">
+        <div class="list-controls">
+          <div class="search-wrap">
+            <i class="ti ti-search search-icon" aria-hidden="true"></i>
+            <input type="search" id="search-notfollowed" class="search-input" placeholder="Search username…" autocomplete="off" spellcheck="false" aria-label="Search accounts you don't follow back" />
+            <button class="search-clear" id="clear-notfollowed" aria-label="Clear search" hidden><i class="ti ti-x" aria-hidden="true"></i></button>
+          </div>
+          <select id="sort-notfollowed" class="sort-select" aria-label="Sort results">
+            <option value="alpha">Name A → Z</option>
+            <option value="alpha-desc">Name Z → A</option>
+            <option value="date-new">Followed you: newest</option>
+            <option value="date-old">Followed you: oldest</option>
+          </select>
+          <button class="export-btn" id="export-notfollowed" aria-label="Export this list as CSV">
+            <i class="ti ti-download" aria-hidden="true"></i> Export CSV
+          </button>
+        </div>
+        <p class="sr-only" id="count-notfollowed" aria-live="polite" aria-atomic="true"></p>
+        <ul class="result-list" id="list-notfollowed" role="list" aria-label="Accounts you don't follow back"></ul>
+      </div>
+
+      <!-- Panel: Recent followers -->
+      <div class="tab-panel hidden" id="panel-recent" role="tabpanel" aria-labelledby="tab-recent">
+        <p class="panel-note">Your most recently gained followers, based on follow timestamps in your export.</p>
+        <ul class="result-list" id="list-recent" role="list" aria-label="Recent followers"></ul>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <p>All processing happens in your browser. No data leaves your device.</p>
+      <p class="footer-note">Not affiliated with Instagram or Meta.</p>
+    </div>
+  </footer>
+
+  <script src="js/parser.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
